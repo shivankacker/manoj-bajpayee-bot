@@ -63,7 +63,6 @@ export const Commands : CommandType[] = [
         output : () => {
             //if time is between 12 to 5
             const currentHour = new Date().getHours()+5;
-            console.log(currentHour + " is the hour!");
             if(probablity(0.1) && currentHour > 0 && currentHour < 5){
                 return GIFS.so_jayie;
             }
