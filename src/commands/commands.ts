@@ -7,6 +7,8 @@ const SLUR_GIFS = require("../content/slurGifs.json");
 const SLURS= require("../content/slurs.json");
 const CONFUSED_GIFS= require("../content/confusedGifs.json");
 
+const donateMessage = "अगर आप मुझसे प्यार करते हैं और मुझे कुछ नहीं होने देना चाहते, तो कृपया मुझे और मेरे डेवलपर्स को जीवित रखने के लिए दान करने पर विचार करें!\n\nScan this QR code through any UPI app : https://cdn.discordapp.com/attachments/656529142166323202/986403432078385232/qr.png";
+
 export const Commands : CommandType[] = [
     {
         type : "INCLUDES_CHAT",
@@ -54,7 +56,16 @@ export const Commands : CommandType[] = [
         }
     },
 
-
+    {
+        type : "INCLUDES_CHAT",
+        includes : ["donate"],
+        isReply : true,
+        output : () => {
+            if(probablity(0.6)){
+                return `क्या मैंने दान के बारे में सुना?\n${donateMessage}`;
+            } 
+        }
+    },
     //DO NOT ADD ANYTHING AFTER THIS
     {
         type : "INCLUDES_CHAT",
@@ -63,9 +74,14 @@ export const Commands : CommandType[] = [
         output : () => {
             //if time is between 12 to 5
             const currentHour = new Date().getHours()+5;
-            if(probablity(0.1) && currentHour > 0 && currentHour < 5){
+            if(probablity(0.1) && currentHour >= 0 && currentHour < 5){
                 return GIFS.so_jayie;
             }
+
+            //donate
+            if(probablity(0.05)){
+                return `मैं आपका समय नहीं खाना चाहता लेकिन ${donateMessage}`; 
+            } 
         }
     }
 ]
