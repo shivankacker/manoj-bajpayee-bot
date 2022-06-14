@@ -2,7 +2,8 @@
   "name": "manoj-bajpayee-bot",
   "version": "0.1.0",
   "scripts": {
-    "start": "nodemon src/index.ts"
+    "dev": "nodemon src/index.ts",
+    "start" : "ts-node src/index.ts"
   },
   "main": "index.js",
   "dependencies": {
