@@ -3,8 +3,10 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 import { createRequire } from "module";
+import { helpMessage } from './commands/commands.js';
 import ProcessCommand from './commands/ProcessCommands.js';
 import { runVoicePranks } from './commands/VoicePranks.js';
+import { convertToParagraph } from './utils/StringUtils.js';
 const require = createRequire(import.meta.url);
 const GIFS = require("./content/gifs.json");
 
@@ -39,15 +41,12 @@ client.on('messageCreate', (message : any) => {
 	};
 });
 
-// Assuming 'newMember' is the second parameter of the event.
-
-
-// const voiceChannels = client.guilds.channels.filter((c : any) => c.type === 'voice');
-// let count = 0;
-// 
-// for (const [id, voiceChannel] of voiceChannels) count += voiceChannel.members.size;
-// 
-// console.log(count);
-
+client.on('guildCreate', guild => {
+	const channel : any = guild.channels.cache.find(channel => channel.type === 'GUILD_TEXT'); //&& channel.permissionsFor(client.user?.id).has('SEND_MESSAGES'))
+    channel.send(convertToParagraph(`
+		मुझे यहाँ बुलाने के लिए धन्यवाद!
+		${helpMessage}\nमज़े करे!\n${GIFS.hello}
+	`));
+})
 
 client.login(token);
