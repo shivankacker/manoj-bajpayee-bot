@@ -47,7 +47,7 @@ client.once('ready', async () => {
 	runVoicePranks(client, db);
 
 	setInterval(()=>{
-		//runVoicePranks(client);
+		runVoicePranks(client, db);
 	},5000)
 });
 
