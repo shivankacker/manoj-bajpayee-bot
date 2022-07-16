@@ -14,7 +14,7 @@ export const testCRUD = async (client : MongoClient) => {
     //await createTestDoc(collection);
 }
 
-const createServerEntry= async (server_id : string, collection : Collection) => {
+export const createServerEntry= async (server_id : string, collection : Collection) => {
     const newDocument = {
         server_id,
         settings : {

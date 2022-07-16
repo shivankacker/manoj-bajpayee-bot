@@ -8,7 +8,7 @@ import { helpMessage } from './commands/commands.js';
 import ProcessCommand from './commands/ProcessCommands.js';
 import { runVoicePranks } from './commands/VoicePranks.js';
 import { convertToParagraph } from './utils/StringUtils.js';
-import { checkServers, listDatabases, testCRUD } from './commands/database.js';
+import { checkServers, createServerEntry, listDatabases, testCRUD } from './commands/database.js';
 const require = createRequire(import.meta.url);
 const GIFS = require("./content/gifs.json");
 
@@ -65,6 +65,9 @@ client.on('messageCreate', (message : any) => {
 });
 
 client.on('guildCreate', guild => {
+
+	createServerEntry(guild.id, db.collection("servers"));
+
 	const channel : any = guild.channels.cache.find(channel => channel.type === 'GUILD_TEXT'); //&& channel.permissionsFor(client.user?.id).has('SEND_MESSAGES'))
     channel.send(convertToParagraph(`
 		मुझे यहाँ बुलाने के लिए धन्यवाद!
