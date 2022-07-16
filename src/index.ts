@@ -1,5 +1,6 @@
 import { Client, Intents } from 'discord.js';
 import dotenv from 'dotenv';
+import { Db, MongoClient, ServerApiVersion } from 'mongodb';
 dotenv.config();
 
 import { createRequire } from "module";
@@ -7,24 +8,46 @@ import { helpMessage } from './commands/commands.js';
 import ProcessCommand from './commands/ProcessCommands.js';
 import { runVoicePranks } from './commands/VoicePranks.js';
 import { convertToParagraph } from './utils/StringUtils.js';
+import { checkServers, listDatabases, testCRUD } from './commands/database.js';
 const require = createRequire(import.meta.url);
 const GIFS = require("./content/gifs.json");
+
+const uri = process.env.MONGO_URL || "";
+const mongoOptions = { 
+	useNewUrlParser: true, 
+	useUnifiedTopology: true, 
+	serverApi: ServerApiVersion.v1 
+}
+const mongoClient = new MongoClient(uri, mongoOptions);
 
 const token = process.env.DISCORD_TOKEN;
 
 const client = new Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES, Intents.FLAGS.GUILD_VOICE_STATES] });
 
-client.once('ready', () => {
+let db : Db;
+
+client.once('ready', async () => {
 	console.log(`Ready! Logged in as ${client.user?.tag}`);
-	client.user?.setActivity("maut ka khel");
+	client.user?.setActivity("chabi dhundne wala khel");
+
+	try {
+		await mongoClient.connect();
+		db = mongoClient.db("mbbot");
+		//await listDatabases(mongoClient);
+		await checkServers(db, client);
+	} catch (error) {
+		console.error(error);
+	} finally {
+		//await mongoClient.close();
+	}
 
 	console.log(`Active in ${client.guilds.cache.size} servers`);
 	console.log(`Active in ${client.channels.cache.size} channels`);
 
-	runVoicePranks(client);
+	runVoicePranks(client, db);
 
 	setInterval(()=>{
-		runVoicePranks(client);
+		//runVoicePranks(client);
 	},5000)
 });
 
@@ -33,7 +56,7 @@ client.on('messageCreate', (message : any) => {
 		if (message.mentions.has(client.user?.id)) {
 			message.reply(GIFS.aa_raha_hu);
 		}else{
-			const out = ProcessCommand(message.content.toLowerCase());
+			const out = ProcessCommand(message, db);
 			if(out && out[1]){
 				out[0] ? message.reply(out[1]) : message.channel.send(out[1]);
 			}

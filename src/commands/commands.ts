@@ -2,6 +2,7 @@ import { CommandType } from "../types/CommandTypes";
 import { createRequire } from "module";
 import { probablity } from "../utils/Probablity.js";
 import { convertToParagraph } from "../utils/StringUtils.js";
+import { updateSettings } from "./database.js";
 const require = createRequire(import.meta.url);
 const GIFS = require("../content/gifs.json");
 const SLUR_GIFS = require("../content/slurGifs.json");
@@ -10,13 +11,20 @@ const CONFUSED_GIFS= require("../content/confusedGifs.json");
 
 const donateMessage = "अगर आप मुझसे प्यार करते हैं और मुझे कुछ नहीं होने देना चाहते, तो कृपया मुझे और मेरे डेवलपर्स को जीवित रखने के लिए दान करने पर विचार करें!\n\nScan this QR code through any UPI app : https://cdn.discordapp.com/attachments/656529142166323202/986403432078385232/qr.png";
 export const helpMessage = `
-यह रहे मेरे कमांड्स :
+**यह रहे मेरे कमांड्स** :
 
-- manoj (hindi gaali) : मै आपको करारा जवाब दूंगा
-- manoj madad/help : मैं आपकी सहायता करूँगा
-- manoj daan/donate : अगर आप मुझे जीवित रखने के लिए डोनेट करना चाहे
-- manoj yogdaan/contribute : अगर आप मेरे ओपन सोर्स कोड पर कंट्रीब्यूट करना चाहे
+- manoj **(hindi gaali)** : मै आपको करारा जवाब दूंगा
+- manoj **madad/help** : मैं आपकी सहायता करूँगा
+- manoj **daan/donate** : अगर आप मुझे जीवित रखने के लिए डोनेट करना चाहे
+- manoj **yogdaan/contribute** : अगर आप मेरे ओपन सोर्स कोड पर कंट्रीब्यूट करना चाहे
+- manoj **settings** : मेरी सेटिंग बदलने के लिए
 `;
+
+const settingMessage = `
+**मेरी सेटिंग्स** :
+
+- manoj **vcjoin start/stop** : मुझे VC में जुड़ने देना चालू/बंद करो
+`
 
 const contributeMessage = `
 मेरा कोड ओपन सोर्स है!
@@ -48,10 +56,41 @@ export const Commands : CommandType[] = [
         type : "PREFIX_CHAT",
         includes : [
             "madad",
-            "help"
+            "help",
         ],
         isReply : true,
         output : () => convertToParagraph(helpMessage)
+    },
+    {
+        type : "PREFIX_CHAT",
+        includes : [
+            "vcjoin",
+        ],
+        isReply : true,
+        output : (message, db) => {
+            const input = message?.content.toLowerCase();
+            const param = input?.split(" ")[2];
+            if(!param || !["start", "stop"].includes(param)){
+                return convertToParagraph(`abbe lawde start karu ya stop karu?\nadd start or stop after the command`)
+            }
+            if(param === "start"){
+                
+            }
+            try {
+                updateSettings(db.collection("servers"), message?.guildId || "", {settings : {vcjoin : param === "start"}}) 
+            } catch (error) {
+                
+            }
+            return convertToParagraph(`vc joining is now **${param === "start" ? "on" : "off"}**`)
+         }
+    },
+    {
+        type : "PREFIX_CHAT",
+        includes : [
+            "settings"
+        ],
+        isReply : true,
+        output : () => convertToParagraph(settingMessage)
     },
     {
         type : "PREFIX_CHAT",

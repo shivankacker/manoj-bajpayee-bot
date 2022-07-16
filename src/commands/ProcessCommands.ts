@@ -1,10 +1,13 @@
 import { Commands } from "./commands.js";
 import { createRequire } from "module";
+import { Message } from "discord.js";
+import { Db } from "mongodb";
 const require = createRequire(import.meta.url);
 const GIFS = require("../content/gifs.json");
 
-export default function ProcessCommand(input : string){
+export default function ProcessCommand(message : Message, db : Db){
 
+    const input = message.content.toLowerCase();
 
     const getcommand = Commands.filter(c=>{
         switch (c.type) {
@@ -34,7 +37,7 @@ export default function ProcessCommand(input : string){
 
     if(getcommand.length > 0){
         const thisCommand = getcommand[0];
-        return [thisCommand.isReply, typeof thisCommand.output() === "string" ? thisCommand.output() : false];
+        return [thisCommand.isReply, typeof thisCommand.output(message, db) === "string" ? thisCommand.output(message, db) : false];
     }
 
     return false;

@@ -1,13 +1,20 @@
 import { AudioPlayerStatus, createAudioPlayer, createAudioResource, joinVoiceChannel } from "@discordjs/voice";
 import { Client } from "discord.js";
 import * as fs from 'fs';
+import { Db } from "mongodb";
 import * as path from 'path';
 import { probablity } from "../utils/Probablity.js";
+import { searchServerFromID } from "./database.js";
 
-export const runVoicePranks = async (client : Client) => {
+export const runVoicePranks = async (client : Client, db: Db) => {
+
+    const db_servers = await searchServerFromID(db.collection("servers"));
+
 	client.channels.cache.filter(c=>c.type === "GUILD_VOICE").forEach((c : any)=>{
+
+        const thisServerDB = db_servers.filter((server)=>server.server_id === c.guild.id)[0];
         
-		if(probablity(0.01) && c.members.size > 0 && !c.members.has(client.user?.id)){
+		if(thisServerDB.settings.vcjoin && probablity(0.01) && c.members.size > 0 && !c.members.has(client.user?.id)){
             
 			console.log("Joining "+c.name)
             
