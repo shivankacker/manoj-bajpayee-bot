@@ -28,7 +28,7 @@ let db : Db;
 
 client.once('ready', async () => {
 	console.log(`Ready! Logged in as ${client.user?.tag}`);
-	client.user?.setActivity('to "manoj"', { type: 'LISTENING' });
+	client.user?.setActivity('"manoj"', { type: 'LISTENING' });
 
 	try {
 		await mongoClient.connect();
