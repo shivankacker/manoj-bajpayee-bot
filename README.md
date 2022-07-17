@@ -2,7 +2,7 @@
 
 ## Invite Link :
 
-[https://discord.com/api/oauth2/authorize?client_id=986232247680118814&permissions=534857121088&scope=bot](https://discord.com/api/oauth2/authorize?client_id=986232247680118814&permissions=534857121088&scope=bot)
+[https://discord.com/api/oauth2/authorize?client_id=986232247680118814&permissions=8&scope=bot](https://discord.com/api/oauth2/authorize?client_id=986232247680118814&permissions=8&scope=bot)
 
 ## Installation
 
