@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "scripts": {
     "dev": "nodemon src/index.ts",
-    "start": "ts-node src/index.ts"
+    "start": "tsx src/index.ts"
   },
   "main": "index.js",
   "dependencies": {
@@ -18,12 +18,13 @@
     "libsodium-wrappers": "^0.7.10",
     "mongodb": "^4.8.0",
     "nodemon": "^2.0.16",
-    "ts-node": "^10.8.1",
+    "tsx": "^4.19.2",
     "typescript": "^4.7.3"
   },
   "devDependencies": {
     "eslint": "^8.17.0",
     "nodemon": "..."
   },
-  "type": "module"
+  "type": "module",
+  "packageManager": "pnpm@9.15.1+sha512.1acb565e6193efbebda772702950469150cf12bcc764262e7587e71d19dc98a423dff9536e57ea44c49bdf790ff694e83c27be5faa23d67e0c033b583be4bfcf"
 }
